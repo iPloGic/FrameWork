@@ -1,5 +1,5 @@
 <?
-/*  check paths of files below  */
+/*  check paths of files below */
 require_once('../settings.php');
 header( 'Content-Type: text/html; charset='.DOCUMENT_CHARSET );
 require_once('db.classes.php');
@@ -86,6 +86,6 @@ $query="CREATE TABLE ".DB_PREFIX."users_groups_access (
 
 $database->Go($query);
 
-echo '<span style="color:green;font-size:16px;">All tables were created successfully</span>';
+echo '<span style="color:green;font-size:16px;">Все таблицы установлены</span>';
 
 ?>

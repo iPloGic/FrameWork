@@ -1,59 +1,61 @@
 <?php
 
-// access areas
+// области доступа
 $wfconfig_access_areas = Array(
+'manager' => 'manage'
 );
 
 $wfconfig_access_areas_ids = Array(
 '0'=>'public',
+'1'=>'manager'
 );
 
-// supported GET requests
+// поддерживаемые GET запросы
 $wfconfig_supported_get = Array(
 '0' => '&utm_'
 );
 
-// architecture type
+// тип архитектуры
 define("WFCONFIG_ARCHITECTURE", 'PFCS');
 
-// components folder name
+// директория расположения компонентов
 define("WFCONFIG_COMPONENTS_FOLDER", 'components');
 
-// templates folder name
+// директория расположения шаблонов
 define("WFCONFIG_VIEW_FOLDER", 'view');
 
-// url of the components location (without the last / and base url)
+// путь url директории компонентов (без последнего /)
 define("WFCONFIG_COMPONENTS_URI", 'components');
 
-// url of the templats location (without the last / and base url)
+// путь url директории шаблонов (без последнего /)
 define("WFCONFIG_VIEW_URI", 'view');
 
-// using standard sql tables
+// использование стандартных sql таблиц
 
-// use aliases
+// Использовать псевдонимы
 define("WFCONFIG_USE_ALIASES_TABLE", false);
 
-// read settings table
+// считывать таблицу установок
 define("WFCONFIG_GET_SETTINGS_TABLE", true);
 
-// standard table will be used to build components cache
+// использовать для построения кэша компонентов стандартную таблицу
 define("WFCONFIG_USE_SECTIONS_TABLE", true);
 
-// registration and users
+// регистрация и пользователи
 
-// validate the user on the registration
+// проверять пользователя на регистрацию
 define("WFCONFIG_INITIATE_REGISTRED_USER", true);
 
-// directory for storage of avatars
+// директория хранения аватаров
 define("WFCONFIG_USER_AVATAR_FOLDER", "img".DIRECTORY_SEPARATOR."avatars");
 
-// avatars extension
+// расширение аватаров
 define("WFCONFIG_USER_AVATAR_EXTENSION", ".png");
 
-// user password field name
+// название поля пароля пользователя
 define("WFCONFIG_USER_PASS_FIELD", "pass");
 
-// user key field name
+// название поля ключа пользователя
 define("WFCONFIG_USER_KEY_FIELD", "key");
 
 ?>
