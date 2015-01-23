@@ -19,10 +19,13 @@ class VIEW
 	public $from_tpl;
 	protected $com_var = Array();
 
-	function __construct($file = '') {		if ( $file != '' ) { $this->ConstructFromFile($file); }
-		return true;	}
+	function __construct($file = '') {
+		if ( $file != '' ) { $this->ConstructFromFile($file); }
+		return true;
+	}
 
-	public function ConstructFromFile($file){		if ( $this->from_tpl = @file_get_contents(VIEW_PATH.$file) ) {
+	public function ConstructFromFile($file){
+		if ( $this->from_tpl = @file_get_contents(VIEW_PATH.$file) ) {
 			return true;
 		}
 		else {
@@ -93,8 +96,10 @@ class VIEW
 					$condition = '';
 				}
 				$accordance = false;
-				switch ($condition) {					case '': if ( $this->com_var[$var] != '' ) { $accordance = true; } break;
+				switch ($condition) {
+					case '': if ( $this->com_var[$var] != '' ) { $accordance = true; } break;
 					case '=': if ( $this->com_var[$var] == $sample ) { $accordance = true; } break;
+					case '!=': if ( $this->com_var[$var] != $sample ) { $accordance = true; } break;
 					case '>': if ( $this->com_var[$var] > $sample ) { $accordance = true; } break;
 					case '<': if ( $this->com_var[$var] < $sample ) { $accordance = true; } break;
 					case '>=': if ( $this->com_var[$var] >= $sample ) { $accordance = true; } break;
@@ -129,7 +134,8 @@ class VIEW
 				$first_pos=mb_strpos($str,$from);
 				$lenght=mb_strpos($str,$to)-$first_pos+mb_strlen($to);
 				$cuted=mb_substr($str,$first_pos,$lenght,DB_CHARSET);
-				foreach($this->com_var[$var_] as $val) {					$block.=str_replace("<[".$var_."]>",$val,$cuted);
+				foreach($this->com_var[$var_] as $val) {
+					$block.=str_replace("<[".$var_."]>",$val,$cuted);
 				}
 				$block=str_replace($from,'',$block);
 				$block=str_replace($to,'',$block);
