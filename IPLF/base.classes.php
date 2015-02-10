@@ -40,10 +40,14 @@ class FRAME_CORE
 		if ( is_object($this->database) ) {
 			return true;
 		}
-		else {			return false;		}
+		else {
+			return false;
+		}
 	}
 
-	public function Init($script=false) {		global $wfconfig_access_areas, $wfconfig_supported_get, $wfconfig_access_areas_ids;		include(dirname(__FILE__).DIRECTORY_SEPARATOR.'config.php');
+	public function Init($script=false) {
+		global $wfconfig_access_areas, $wfconfig_supported_get, $wfconfig_access_areas_ids;
+		include(dirname(__FILE__).DIRECTORY_SEPARATOR.'config.php');
 		define("BASE_URL",WEB_PROTOCOL.$_SERVER['HTTP_HOST'].SCRIPT_FOLDER);
 		define("BASE_PATH",str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR,$_SERVER['DOCUMENT_ROOT'].str_replace('/',DIRECTORY_SEPARATOR,SCRIPT_FOLDER)));
 		define("COMPONENTS_PATH",BASE_PATH.WFCONFIG_COMPONENTS_FOLDER.DIRECTORY_SEPARATOR);
@@ -52,32 +56,36 @@ class FRAME_CORE
 		if ( ini_get('display_errors')==1 ) { $this->parameters['show_errors'] = true; }
 		$this->parameters['access_areas_array'] = $wfconfig_access_areas_ids;
 		$this->parameters['header_dynamic_tags'] = '';
-		// ïîëó÷àåì îñíîâíûå ïàðàìåòðû
+		// Ã¯Ã®Ã«Ã³Ã·Ã Ã¥Ã¬ Ã®Ã±Ã­Ã®Ã¢Ã­Ã»Ã¥ Ã¯Ã Ã°Ã Ã¬Ã¥Ã²Ã°Ã»
 		if (WFCONFIG_GET_SETTINGS_TABLE) {
 			$sql = "SELECT * FROM `".DB_PREFIX."settings`";
 			$rows=$this->database->GetResult($sql);
 			if ($rows) {
 				foreach($rows as $par){
-					$this->parameters[$par['name']]=$par['val'];
+					$this->parameters[$par['name']]=$par['value'];
 				}
 			}
 		}
-		// Ïîëó÷àåì îáëàñòü äîñòóïà
-		foreach ($wfconfig_access_areas as $key=>$val) {			if (substr(str_replace(SCRIPT_FOLDER,'',$_SERVER['REQUEST_URI']),0,strlen($val))==$val) {				$this->access_area = $key;
+		// ÃÃ®Ã«Ã³Ã·Ã Ã¥Ã¬ Ã®Ã¡Ã«Ã Ã±Ã²Ã¼ Ã¤Ã®Ã±Ã²Ã³Ã¯Ã 
+		foreach ($wfconfig_access_areas as $key=>$val) {
+			if (substr(str_replace(SCRIPT_FOLDER,'',$_SERVER['REQUEST_URI']),0,strlen($val))==$val) {
+				$this->access_area = $key;
 				$this->access_folder = $val;
-			}		}
-		// îáðàáîòêà àäðåñà ñòðàíèöû
+			}
+		}
+		// Ã®Ã¡Ã°Ã Ã¡Ã®Ã²ÃªÃ  Ã Ã¤Ã°Ã¥Ã±Ã  Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã»
 		$this->parameters['pagination_position']=1;
 		if (!$script) {
 			$this->UriDecode();
 		}
-		// ïîëó÷åíèå èìåíè ðàçäåëà
+		// Ã¯Ã®Ã«Ã³Ã·Ã¥Ã­Ã¨Ã¥ Ã¨Ã¬Ã¥Ã­Ã¨ Ã°Ã Ã§Ã¤Ã¥Ã«Ã 
 		$this->section_name = $this->parameters['url_variables'][1];
 		if ($this->section_name == '') { $this->section_name = 'home'; }
-		// ïîëó÷àåì ïóòåé ê øàáëîíàì
+		// Ã¯Ã®Ã«Ã³Ã·Ã Ã¥Ã¬ Ã¯Ã³Ã²Ã¥Ã© Ãª Ã¸Ã Ã¡Ã«Ã®Ã­Ã Ã¬
 		$this->DefineViewConstants();
-		// èíèöèèðóåì ïîëüçîâàòåëÿ è åãî ïðàâà
-		if (WFCONFIG_INITIATE_REGISTRED_USER) {			$this->parameters['authorized']=false;
+		// Ã¨Ã­Ã¨Ã¶Ã¨Ã¨Ã°Ã³Ã¥Ã¬ Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã²Ã¥Ã«Ã¿ Ã¨ Ã¥Ã£Ã® Ã¯Ã°Ã Ã¢Ã 
+		if (WFCONFIG_INITIATE_REGISTRED_USER) {
+			$this->parameters['authorized']=false;
 			$this->user = new USER();
 			if (isset($_SESSION['authorized_user']) && $_SESSION['authorized_user']!="") {
 				if ($this->user->ConstructFromTable($_SESSION['authorized_user'])) {
@@ -86,14 +94,18 @@ class FRAME_CORE
 			}
 			$this->user->GetAccess();
 			if ( !$this->user->area_access ) {
-				if (file_exists(BASE_PATH.$this->access_folder.DIRECTORY_SEPARATOR.'area_authorization.php')) {					include(BASE_PATH.$this->access_folder.DIRECTORY_SEPARATOR.'area_authorization.php');  die();				}
+				if (file_exists(BASE_PATH.$this->access_folder.DIRECTORY_SEPARATOR.'area_authorization.php')) {
+					include(BASE_PATH.$this->access_folder.DIRECTORY_SEPARATOR.'area_authorization.php');  die();
+				}
 				else { echo "<h1>Access to this area is prohibited</h1>"; die(); }
 			}
 		}
 		return true;
 	}
 
-	private function UriDecode() {		global $wfconfig_supported_get;		$ar_urlv=explode("/", $_SERVER['REQUEST_URI']);
+	private function UriDecode() {
+		global $wfconfig_supported_get;
+		$ar_urlv=explode("/", $_SERVER['REQUEST_URI']);
 		$ar_last=end($ar_urlv);
 		$sup_get = false;
 		foreach ( $wfconfig_supported_get as $p ) {
@@ -109,7 +121,8 @@ class FRAME_CORE
 		$urilen=strlen($_SERVER['REQUEST_URI']);
 		if ( $this->access_folder != '' ) { $lbase = SCRIPT_FOLDER.$this->access_folder.'/'; }
 		else { $lbase = SCRIPT_FOLDER; }
-		if (substr($_SERVER['REQUEST_URI'],$urilen-strlen(REF_END))!=REF_END && $_SERVER['REQUEST_URI']!=$lbase) {			header("Location: ".$_SERVER['REQUEST_URI'].REF_END." ");
+		if (substr($_SERVER['REQUEST_URI'],$urilen-strlen(REF_END))!=REF_END && $_SERVER['REQUEST_URI']!=$lbase) {
+			header("Location: ".$_SERVER['REQUEST_URI'].REF_END." ");
 		}
 		$uri= str_replace(REF_END,'/',$_SERVER['REQUEST_URI']);
 		$fl=strlen(SCRIPT_FOLDER)-1;
@@ -133,7 +146,8 @@ class FRAME_CORE
 		else {
 			$this->parameters['url_variables'] = $this->parameters['url_variables_real'];
 		}
-		return true;	}
+		return true;
+	}
 
 	private function AliasDecode($urlv) {
 		$sql = "SELECT * FROM ".DB_PREFIX."aliases WHERE alias='".$urlv[1]."' OR alias LIKE '".$urlv[1]."/%'";
@@ -159,12 +173,15 @@ class FRAME_CORE
 		}
 	}
 
-	protected function DefineViewConstants() {		if ($this->access_area!='public') {
+	protected function DefineViewConstants() {
+		if ($this->access_area!='public') {
 			define("VIEW_PATH",BASE_PATH.$this->access_folder.DIRECTORY_SEPARATOR.WFCONFIG_VIEW_FOLDER.DIRECTORY_SEPARATOR);
 			define("VIEW_URL",BASE_URL.$this->access_folder."/".WFCONFIG_VIEW_URI."/");
 		}
-		else {			define("VIEW_PATH",BASE_PATH.WFCONFIG_VIEW_FOLDER.DIRECTORY_SEPARATOR);
-			define("VIEW_URL",BASE_URL.WFCONFIG_VIEW_URI."/");		}
+		else {
+			define("VIEW_PATH",BASE_PATH.WFCONFIG_VIEW_FOLDER.DIRECTORY_SEPARATOR);
+			define("VIEW_URL",BASE_URL.WFCONFIG_VIEW_URI."/");
+		}
 		return true;
 	}
 
@@ -201,8 +218,10 @@ class FRAME_CORE
 			if ( $add ) { self::getInstance()->parameters[$par] .= $val; }
 			else { self::getInstance()->parameters[$par] = $val; }
 		}
-		else {			if ( $add ) { self::getInstance()->parameters[$par][$key] .= $val; }
-			else { self::getInstance()->parameters[$par][$key] = $val; }		}
+		else {
+			if ( $add ) { self::getInstance()->parameters[$par][$key] .= $val; }
+			else { self::getInstance()->parameters[$par][$key] = $val; }
+		}
 		return true;
 	}
 
@@ -249,7 +268,9 @@ class FRAME_CORE
 		if ( file_exists( BASE_URL."404.php" ) ) {
 			header("Location: ".BASE_URL."404.php ");
 		}
-		else {			echo "Error 404. Page not found. Check URL, or try later.";		}
+		else {
+			echo "Error 404. Page not found. Check URL, or try later.";
+		}
 	}
 
 	public function Execute() {
