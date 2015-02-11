@@ -87,7 +87,7 @@ class FORM
 		return true;
 	}
 
-	public function AddFieldFreeAttributs($value, $name = '') {
+	public function AddTagAttributs($value, $name = '') {
 		if ($name!='' && !isset($this->fields[$name])) { return false; }
 		if ($name=='' && !$this->cfield) { return false; }
 		if ($name=='' && $this->cfield) { $name=$this->cfield; }
