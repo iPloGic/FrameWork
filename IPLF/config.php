@@ -5,7 +5,7 @@ $wfconfig_access_areas = Array(
 );
 
 $wfconfig_access_areas_ids = Array(
-'0'=>'public',
+'0'=>'public'
 );
 
 // supported GET requests
@@ -22,10 +22,10 @@ define("WFCONFIG_COMPONENTS_FOLDER", 'components');
 // templates folder name
 define("WFCONFIG_VIEW_FOLDER", 'view');
 
-// url of the components location (without the last / and base url)
+// url of the components location (without the last "/" and base url)
 define("WFCONFIG_COMPONENTS_URI", 'components');
 
-// url of the templats location (without the last / and base url)
+// url of the templats location (without the last "/" and base url)
 define("WFCONFIG_VIEW_URI", 'view');
 
 // using standard sql tables
