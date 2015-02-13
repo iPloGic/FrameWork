@@ -133,7 +133,15 @@ class FORM
 			$this->template = file_get_contents($this->template);
 		}
 		foreach($this->fields as $field) {
-			$this->template = str_replace('<['.$field->name.']>',$field->Render(),$this->template);
+			if ( $field->type == 'radio' ) {
+				foreach( $field->values as $value ) {
+					$field->val = $value;
+					$this->template = str_replace('<['.$field->name.'||'.$field->val.']>',$field->Render($value),$this->template);
+				}
+			}
+			else {
+				$this->template = str_replace('<['.$field->name.']>',$field->Render(),$this->template);
+			}
 		}
 		$html .= $this->template;
 		$this->template = '';
@@ -323,7 +331,7 @@ class FORM_ELEMENT_TEXTAREA extends FORM_ELEMENT {
 class FORM_ELEMENT_INPUT extends FORM_ELEMENT {
 
 	public $autocomplete = '';     // text, password, email, search, url, tel
-	public $checked = false;       // radio, chechbox
+	public $checked = false;       // chechbox
 	public $pattern = '';     // text, email, search, url, tel
 
 	public function GetChecked() {
@@ -339,7 +347,7 @@ class FORM_ELEMENT_INPUT extends FORM_ELEMENT {
 		$html = '<input type="'.$type.'" name="'.$this->name.'"';
 		$html .= ($this->form!='' ? ' form="'.$this->form.'"' : '');
 		$html .= ($this->id!='' ? ' id="'.$this->id.'"' : '');
-		$html .= ' value="'.$this->value.'"';
+		if ($this->type!='radio') { $html .= ' value="'.$this->value.'"'; }
 		return $html;
 	}
 
@@ -363,17 +371,6 @@ class FORM_ELEMENT_INPUT extends FORM_ELEMENT {
 
 }
 
-
-class FORM_ELEMENT_INPUT_HIDDEN extends FORM_ELEMENT_INPUT {
-
-	public function Render() {
-		$html = $this->RenderStart('hidden');
-		$html .= $this->RenderEnd();
-		return $html;
-	}
-
-}
-
 class FORM_ELEMENT_INPUT_TEXT extends FORM_ELEMENT_INPUT {
 
 	public $size = '';
@@ -383,6 +380,16 @@ class FORM_ELEMENT_INPUT_TEXT extends FORM_ELEMENT_INPUT {
 		$html .= ($this->pattern!='' ? ' pattern="'.$this->pattern.'"' : '');
 		$html .= ($this->size!='' ? ' size="'.$this->size.'"' : '');
 		$html .= $this->RenderText();
+		$html .= $this->RenderEnd();
+		return $html;
+	}
+
+}
+
+class FORM_ELEMENT_INPUT_HIDDEN extends FORM_ELEMENT_INPUT {
+
+	public function Render() {
+		$html = $this->RenderStart('hidden');
 		$html .= $this->RenderEnd();
 		return $html;
 	}
@@ -480,8 +487,19 @@ class FORM_ELEMENT_INPUT_IMAGE extends FORM_ELEMENT_INPUT {
 
 class FORM_ELEMENT_INPUT_RADIO extends FORM_ELEMENT_INPUT {
 
-	public function Render() {
+	public $values = Array();
+	public $val = '';
+
+	public function Render($value) {
 		$html = $this->RenderStart('radio');
+		$html .= ' value="'.$this->val.'"';
+		if ( $this->value == $value ) {
+			if ($doctype == 'xhtml') { $html .= ' checked="checked"'; }
+			else { $html .= ' checked'; }
+		}
+		else {
+			$html .= '';
+		}
 		$html .= $this->GetChecked();
 		$html .= $this->RenderEnd();
 		return $html;
