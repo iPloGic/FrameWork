@@ -79,11 +79,11 @@ class FORM
 		return true;
 	}
 
-	public function AddFieldAttribut($attribut, $value, $name = '') {
+	public function AddFieldAttribute($attribute, $value, $name = '') {
 		if ($name!='' && !isset($this->fields[$name])) { return false; }
 		if ($name=='' && !$this->cfield) { return false; }
 		if ($name=='' && $this->cfield) { $name=$this->cfield; }
-		if ( isset($this->fields[$name]->$attribut) ) { $this->fields[$name]->$attribut = $value; } else { return false; }
+		if ( isset($this->fields[$name]->$attribute) ) { $this->fields[$name]->$attribute = $value; } else { return false; }
 		return true;
 	}
 
@@ -102,7 +102,15 @@ class FORM
 		} else { return false; }
 	}
 
-	public function ChangeOptionAttrib($name,$ident,$attribute,$value) {
+	public function AddValue($value, $name = '') {
+		if ($name!='' && !isset($this->fields[$name])) { return false; }
+		if ($name=='' && !$this->cfield) { return false; }
+		if ($name=='' && $this->cfield) { $name=$this->cfield; }
+		$this->fields[$name]->values[]=$value;
+		return true;
+	}
+
+	public function ChangeOptionAttributs($name,$ident,$attribute,$value) {
 		if ( $this->fields[$name]->type != 'select' && $this->fields[$name]->type != 'datalist') { return false; }
 		if ( $this->fields[$name]->ChangeOptionAttrib($ident,$attribute,$value) ) {
 			return true;
