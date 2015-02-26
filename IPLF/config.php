@@ -44,6 +44,9 @@ define("WFCONFIG_USE_SECTIONS_TABLE", true);
 // validate the user on the registration
 define("WFCONFIG_INITIATE_REGISTRED_USER", true);
 
+// use cookie for authorization
+define("WFCONFIG_USE_COOKIE_AUTHORIZATION", true);
+
 // directory for storage of avatars
 define("WFCONFIG_USER_AVATAR_FOLDER", "img".DIRECTORY_SEPARATOR."avatars");
 
