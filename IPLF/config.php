@@ -44,6 +44,9 @@ define("WFCONFIG_USE_SECTIONS_TABLE", true);
 // validate the user on the registration
 define("WFCONFIG_INITIATE_REGISTRED_USER", true);
 
+// sessions and cookies life time
+define("WFCONFIG_SESSION_TIME", 259200);
+
 // use cookie for authorization
 define("WFCONFIG_USE_COOKIE_AUTHORIZATION", true);
 
