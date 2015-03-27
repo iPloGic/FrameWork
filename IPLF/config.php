@@ -48,7 +48,7 @@ define("WFCONFIG_INITIATE_REGISTRED_USER", true);
 define("WFCONFIG_SESSION_TIME", 259200);
 
 // use cookie for authorization
-define("WFCONFIG_USE_COOKIE_AUTHORIZATION", true);
+define("WFCONFIG_USE_COOKIE_AUTHORIZATION", false);
 
 // directory for storage of avatars
 define("WFCONFIG_USER_AVATAR_FOLDER", "img".DIRECTORY_SEPARATOR."avatars");
