@@ -51,7 +51,7 @@ $query="CREATE TABLE IF NOT EXISTS `".DB_PREFIX."aliases` (
 $database->Go($query);
 
 $query="CREATE TABLE IF NOT EXISTS `".DB_PREFIX."users` (
-	`id` int(3) NOT NULL,
+	`id` int(20) NOT NULL,
 	`login` varchar(255) NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`pass` varchar(255) NOT NULL,
@@ -82,6 +82,17 @@ $query="CREATE TABLE `".DB_PREFIX."users_groups_access` (
 	`area` int(3) NOT NULL ,
 	`section` varchar(255) NOT NULL ,
 	`access` int(1) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=".DB_CHARSET;
+
+$database->Go($query);
+
+$query="CREATE TABLE `".DB_PREFIX."sessions` (
+	`sid` varchar(255) NOT NULL ,
+	`user` int(20) NOT NULL ,
+	`data` text NOT NULL,
+	`started` int(20) NOT NULL ,
+	`expire` int(20) NOT NULL
+	INDEX (`sid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=".DB_CHARSET;
 
 $database->Go($query);
