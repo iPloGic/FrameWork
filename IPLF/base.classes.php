@@ -47,7 +47,6 @@ class FRAME_CORE
 
 	public function Init($script=false) {
 		global $wfconfig_access_areas, $wfconfig_supported_get, $wfconfig_access_areas_ids;
-		include(dirname(__FILE__).DIRECTORY_SEPARATOR.'config.php');
 		define("BASE_URL",WEB_PROTOCOL.$_SERVER['HTTP_HOST'].SCRIPT_FOLDER);
 		define("BASE_PATH",str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR,$_SERVER['DOCUMENT_ROOT'].str_replace('/',DIRECTORY_SEPARATOR,SCRIPT_FOLDER)));
 		define("COMPONENTS_PATH",BASE_PATH.WFCONFIG_COMPONENTS_FOLDER.DIRECTORY_SEPARATOR);
@@ -56,7 +55,7 @@ class FRAME_CORE
 		if ( ini_get('display_errors')==1 ) { $this->parameters['show_errors'] = true; }
 		$this->parameters['access_areas_array'] = $wfconfig_access_areas_ids;
 		$this->parameters['header_dynamic_tags'] = '';
-		// ïîëó÷àåì îñíîâíûå ïàðàìåòðû
+		// get base parameters
 		if (WFCONFIG_GET_SETTINGS_TABLE) {
 			$sql = "SELECT * FROM `".DB_PREFIX."settings`";
 			$rows=$this->database->GetResult($sql);
@@ -66,24 +65,24 @@ class FRAME_CORE
 				}
 			}
 		}
-		// Ïîëó÷àåì îáëàñòü äîñòóïà
+		// get access area
 		foreach ($wfconfig_access_areas as $key=>$val) {
 			if (substr(str_replace(SCRIPT_FOLDER,'',$_SERVER['REQUEST_URI']),0,strlen($val))==$val) {
 				$this->access_area = $key;
 				$this->access_folder = $val;
 			}
 		}
-		// îáðàáîòêà àäðåñà ñòðàíèöû
+		// page url handling
 		$this->parameters['pagination_position']=1;
 		if (!$script) {
 			$this->UriDecode();
 		}
-		// ïîëó÷åíèå èìåíè ðàçäåëà
+		// get section name
 		$this->section_name = $this->parameters['url_variables'][1];
 		if ($this->section_name == '') { $this->section_name = 'home'; }
-		// ïîëó÷àåì ïóòåé ê øàáëîíàì
+		// get templates paths
 		$this->DefineViewConstants();
-		// èíèöèèðóåì ïîëüçîâàòåëÿ è åãî ïðàâà
+		// initiate user and user rights
 		if (WFCONFIG_INITIATE_REGISTRED_USER) {
 			$this->parameters['authorized']=false;
 			$this->user = new USER();
@@ -154,17 +153,17 @@ class FRAME_CORE
 		$rows=$this->database->GetResult($sql);
 		if ($rows) {
 			foreach($rows as $row) {
-				$aaliases[$row['alias']]=$row['uri'];
+				$aaliases[$row['alias']]=$row['url'];
 			}
 			$talies = $urlv[1];
-			$alies = $urlv[1];
+			$alias = $urlv[1];
 			for($i=2; $i<=count($urlv); $i++) {
 				$talies .= '/'.$urlv[$i];
-				if (isset($aalieses[$talies])) {
+				if (isset($aaliases[$talies])) {
 					$alias = $talias;
 				}
 			}
-			$uri=$aalieses[$alias];
+			$uri=$aaliases[$alias];
 			$urlv=explode("/", $uri);
 			return $urlv;
 		}
