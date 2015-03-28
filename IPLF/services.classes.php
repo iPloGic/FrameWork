@@ -42,6 +42,11 @@ class TIMER
 		return $totaltime;
 	}
 
+	public function GetCurrentValue() {
+		$time = round(($this->stop - $this->GetCurrent()),2);
+		return $time;
+	}
+
 }
 
 
