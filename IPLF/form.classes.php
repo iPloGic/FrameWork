@@ -1,5 +1,4 @@
-<?
-
+<?php
 
 /*
 
@@ -16,10 +15,8 @@
 */
 
 
-
 class FORM
 {
-
 	public $template;
 	public $template_type = 'text';
 	public $action = './';
@@ -190,18 +187,18 @@ class FORM
 }
 
 
-class FORM_ELEMENT {
-
+class FORM_ELEMENT
+{
 	public $form = '';
 	public $name;
 	public $type;
 	public $id = '';
 	public $value = '';
-	public $readonly = false;     // textarea, text, password
+	public $readonly = false;      // textarea, text, password
 	public $disabled = false;
 	public $attributs = '';
 	public $doctype = 'xhtml';
-	public $maxlength = '';      // textarea, text, password
+	public $maxlength = '';        // textarea, text, password
 	public $placeholder = '';      // textarea, text, password
 	public $tabindex = '';
 	public $accesskey = '';
@@ -228,8 +225,8 @@ class FORM_ELEMENT {
 }
 
 
-class FORM_ELEMENT_OPTION {
-
+class FORM_ELEMENT_OPTION
+{
 	public $text = '';
 	public $value = '';
 	public $selected = false;
@@ -248,12 +245,12 @@ class FORM_ELEMENT_OPTION {
 }
 
 
-class FORM_ELEMENT_SELECT extends FORM_ELEMENT {
-
-	private $options = Array();
+class FORM_ELEMENT_SELECT extends FORM_ELEMENT
+{
 	public $multiple = false;
 	public $size = '';
 	public $value = false;
+	private $options = Array();
 
 	public function AddOption($value,$text,$selected=false,$disabled=false,$label='') {
 		$option = new FORM_ELEMENT_OPTION();
@@ -288,7 +285,12 @@ class FORM_ELEMENT_SELECT extends FORM_ELEMENT {
 		$html .= ($this->attributs!='' ? ' '.$this->attributs.'' : '').'>';
 		if ( $this->value ) {
 			foreach($this->options as $option) {
-				if ( $this->value == $option->value ) { $option->selected = true; } else { $option->selected = false; }
+				if ( $this->multiple && is_array($this->value) ) {
+					if ( in_array($option->value,$this->value) ) { $option->selected = true; } else { $option->selected = false; }
+				}
+				else {
+					if ( $this->value == $option->value ) { $option->selected = true; } else { $option->selected = false; }
+				}
 			}
 		}
 		foreach($this->options as $option) {
@@ -301,8 +303,8 @@ class FORM_ELEMENT_SELECT extends FORM_ELEMENT {
 }
 
 
-class FORM_ELEMENT_TEXTAREA extends FORM_ELEMENT {
-
+class FORM_ELEMENT_TEXTAREA extends FORM_ELEMENT
+{
 	public $cols = '';
 	public $rows = '';
 	public $wrap = '';
@@ -328,11 +330,11 @@ class FORM_ELEMENT_TEXTAREA extends FORM_ELEMENT {
 }
 
 
-class FORM_ELEMENT_INPUT extends FORM_ELEMENT {
-
+class FORM_ELEMENT_INPUT extends FORM_ELEMENT
+{
 	public $autocomplete = '';     // text, password, email, search, url, tel
 	public $checked = false;       // chechbox
-	public $pattern = '';     // text, email, search, url, tel
+	public $pattern = '';          // text, email, search, url, tel
 
 	public function GetChecked() {
 		if ( $this->value == 1 ) { $this->checked = true; }
@@ -371,8 +373,9 @@ class FORM_ELEMENT_INPUT extends FORM_ELEMENT {
 
 }
 
-class FORM_ELEMENT_INPUT_TEXT extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_TEXT extends FORM_ELEMENT_INPUT
+{
 	public $size = '';
 
 	public function Render() {
@@ -386,7 +389,9 @@ class FORM_ELEMENT_INPUT_TEXT extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_HIDDEN extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_HIDDEN extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('hidden');
@@ -396,8 +401,9 @@ class FORM_ELEMENT_INPUT_HIDDEN extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_PASSWORD extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_PASSWORD extends FORM_ELEMENT_INPUT
+{
 	public $size = '';
 
 	public function Render() {
@@ -410,8 +416,9 @@ class FORM_ELEMENT_INPUT_PASSWORD extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_FILE extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_FILE extends FORM_ELEMENT_INPUT
+{
 	public $accept = '';
 	public $multiple = false;
 
@@ -425,7 +432,9 @@ class FORM_ELEMENT_INPUT_FILE extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_BUTTON extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_BUTTON extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('button');
@@ -435,8 +444,9 @@ class FORM_ELEMENT_INPUT_BUTTON extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_SUBMIT extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_SUBMIT extends FORM_ELEMENT_INPUT
+{
 	public $formaction = '';
 	public $formenctype = '';
 	public $formmethod = '';
@@ -456,7 +466,9 @@ class FORM_ELEMENT_INPUT_SUBMIT extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_RESET extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_RESET extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('reset');
@@ -466,8 +478,9 @@ class FORM_ELEMENT_INPUT_RESET extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_IMAGE extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_IMAGE extends FORM_ELEMENT_INPUT
+{
 	public $align = '';
 	public $alt = '';
 	public $border = '';
@@ -485,8 +498,9 @@ class FORM_ELEMENT_INPUT_IMAGE extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_RADIO extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_RADIO extends FORM_ELEMENT_INPUT
+{
 	public $values = Array();
 	public $val = '';
 
@@ -507,7 +521,9 @@ class FORM_ELEMENT_INPUT_RADIO extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_CHECKBOX extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_CHECKBOX extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('checkbox');
@@ -518,8 +534,9 @@ class FORM_ELEMENT_INPUT_CHECKBOX extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_DATALIST extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_DATALIST extends FORM_ELEMENT_INPUT
+{
 	private $options = Array();
 
 	public function AddOption($value,$text,$selected=false,$disabled=false,$label='') {
@@ -556,8 +573,9 @@ class FORM_ELEMENT_INPUT_DATALIST extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_NUMBER extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_NUMBER extends FORM_ELEMENT_INPUT
+{
 	public $max = '';
 	public $min = '';
 	public $step = '';
@@ -573,8 +591,9 @@ class FORM_ELEMENT_INPUT_NUMBER extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_RANGE extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_RANGE extends FORM_ELEMENT_INPUT
+{
 	public $max = '';
 	public $min = '';
 	public $step = '';
@@ -590,8 +609,9 @@ class FORM_ELEMENT_INPUT_RANGE extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_DATE extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_DATE extends FORM_ELEMENT_INPUT
+{
 	public $max = '';
 	public $min = '';
 
@@ -605,7 +625,9 @@ class FORM_ELEMENT_INPUT_DATE extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_DATETIME extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_DATETIME extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('datetime');
@@ -615,7 +637,9 @@ class FORM_ELEMENT_INPUT_DATETIME extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_DATETIME_LOCAL extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_DATETIME_LOCAL extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('datetime-local');
@@ -625,7 +649,9 @@ class FORM_ELEMENT_INPUT_DATETIME_LOCAL extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_TIME extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_TIME extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('time');
@@ -635,8 +661,9 @@ class FORM_ELEMENT_INPUT_TIME extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_EMAIL extends FORM_ELEMENT_INPUT {
 
+class FORM_ELEMENT_INPUT_EMAIL extends FORM_ELEMENT_INPUT
+{
 	public $multiple = false;
 
 	public function Render() {
@@ -650,7 +677,9 @@ class FORM_ELEMENT_INPUT_EMAIL extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_SEARCH extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_SEARCH extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('search');
@@ -662,7 +691,9 @@ class FORM_ELEMENT_INPUT_SEARCH extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_URL extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_URL extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('url');
@@ -674,7 +705,9 @@ class FORM_ELEMENT_INPUT_URL extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_TEL extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_TEL extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('tel');
@@ -686,7 +719,9 @@ class FORM_ELEMENT_INPUT_TEL extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_COLOR extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_COLOR extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('color');
@@ -696,7 +731,9 @@ class FORM_ELEMENT_INPUT_COLOR extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_MONTH extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_MONTH extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('month');
@@ -706,7 +743,9 @@ class FORM_ELEMENT_INPUT_MONTH extends FORM_ELEMENT_INPUT {
 
 }
 
-class FORM_ELEMENT_INPUT_WEEK extends FORM_ELEMENT_INPUT {
+
+class FORM_ELEMENT_INPUT_WEEK extends FORM_ELEMENT_INPUT
+{
 
 	public function Render() {
 		$html = $this->RenderStart('week');
@@ -715,8 +754,6 @@ class FORM_ELEMENT_INPUT_WEEK extends FORM_ELEMENT_INPUT {
 	}
 
 }
-
-
 
 
 ?>

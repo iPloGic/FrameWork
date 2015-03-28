@@ -14,6 +14,7 @@
 
 */
 
+
 class FRAME_CORE
 {
 	public $access_folder = '';

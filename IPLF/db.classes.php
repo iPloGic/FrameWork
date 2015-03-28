@@ -14,6 +14,7 @@
 
 */
 
+
 class DB
 {
 	public $link_error_include;
@@ -21,10 +22,14 @@ class DB
 	public $error_prefix = 'Не могу выполнить запрос';
 	private $link;
 
-	function __construct($main = true, $error_file = ''){		if ( $error_file == '' ) {			if ( defined('BASE_PATH') ) {
+	function __construct($main = true, $error_file = ''){
+		if ( $error_file == '' ) {
+			if ( defined('BASE_PATH') ) {
 				$this->link_error_include = BASE_PATH.'/sqlerror.php';
 			}
-			else {				$this->link_error_include = false;			}
+			else {
+				$this->link_error_include = false;
+			}
 		}
 		else {
 			$this->link_error_include = $error_file;
@@ -44,9 +49,12 @@ class DB
 			die();
 		}
 		if (!mysql_select_db($db_base, $this->link)) {
-			if ( $this->link_error_include ) {				include($this->link_error_include);
+			if ( $this->link_error_include ) {
+				include($this->link_error_include);
 			}
-			else {				echo 'SQL server connection error';			}
+			else {
+				echo 'SQL server connection error';
+			}
 			die();
 		}
 		mysql_query("SET NAMES '".DB_CHARSET."'");
@@ -60,9 +68,8 @@ class DB
 	}
 
 	private function ErrorOut($query,$error) {
-		global $core;
 		$mes = $this->error_prefix." (".$query.")<br />". mysql_error();
-		if (!is_object($core) || FRAME_CORE::Parameter('show_errors')==1) {
+		if ( FRAME_CORE::Parameter('show_errors')==1 ) {
 			echo "<br />".$mes."<br />";
 		}
 		if ( $this->log_errors ) {
@@ -139,7 +146,8 @@ class DB
 		if (!$result=mysql_query($query, $this->link)) { return false; } else { return true; }
 	}
 
-	public function TableExists($table) {		$query="SHOW TABLES LIKE '".$table."'";
+	public function TableExists($table) {
+		$query="SHOW TABLES LIKE '".$table."'";
 		if ( $this->RowsCount($query)>0 ) { return true; }
 		return false;
 	}
@@ -149,6 +157,8 @@ class DB
 		if ( RowsCount($query)>0 ) { return true; }
 		return false;
 	}
+
 }
+
 
 ?>

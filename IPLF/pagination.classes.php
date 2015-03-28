@@ -14,9 +14,13 @@
 
 */
 
+
 class PAGINATION
 {
-
+	public $onpage = 20;
+	public $page = 1;
+	public $start = 0;
+	public $rel_canonical = true;
 	private $type=1;
 	private $left_pn=3;
 	private $middle_pn=5;
@@ -28,18 +32,20 @@ class PAGINATION
 	private $template_current_position='<b><[position]></b> ';
 	private $template_position="<a href='<[base_url]><[sect]>p=<[position]>'><[position]></a> ";
 	private $space = "... ";
-	public $onpage = 20;
-	public $page = 1;
-	public $start = 0;
-	public $rel_canonical = true;
 
-	function __construct() {		if ( FRAME_CORE::Parameter('pagination_position') != 1 && FRAME_CORE::Parameter('pagination_position') != '' ) {			$this->page = FRAME_CORE::Parameter('pagination_position');
-			$this->start = abs(( $this->page - 1 ) * $this->onpage );		}
-		return true;	}
+	function __construct() {
+		if ( FRAME_CORE::Parameter('pagination_position') != 1 && FRAME_CORE::Parameter('pagination_position') != '' ) {
+			$this->page = FRAME_CORE::Parameter('pagination_position');
+			$this->start = abs(( $this->page - 1 ) * $this->onpage );
+		}
+		return true;
+	}
 
-	public function SetOnPage($a) {		$this->onpage = $a;
+	public function SetOnPage($a) {
+		$this->onpage = $a;
 		$this->start = abs(( $this->page - 1 ) * $this->onpage );
-		return true;	}
+		return true;
+	}
 
 	public function SetPType($a) {
 		$this->type = $a;
@@ -133,14 +139,18 @@ class PAGINATION
 		return $page_choose;
 	}
 
-	private function GetPrevBlock($sect,$prev,$first) {		if ($first) {
+	private function GetPrevBlock($sect,$prev,$first) {
+		if ($first) {
 			$s = $this->template_prev_block_na;
 		}
-		else {			$s = $this->template_prev_block;		}
+		else {
+			$s = $this->template_prev_block;
+		}
 		$s = str_replace('<[base_url]>',BASE_URL,$s);
 		$s = str_replace('<[sect]>',$sect,$s);
 		$s = str_replace('<[prev]>',$prev,$s);
-		return $s;	}
+		return $s;
+	}
 
 	private function GetNextBlock($sect,$next,$pages_num,$last) {
 		if ($last) {
@@ -171,5 +181,6 @@ class PAGINATION
 	}
 
 }
+
 
 ?>

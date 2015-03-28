@@ -3,7 +3,7 @@
 /*
 
 *** Images Works Class
-*** Is a part of iPloGic IPLF FrameWork 1.x
+*** Is a part of iPloGic FrameWork 1.x
 *** Version 1.0
 
 *** Copyright (C) 2013 iPloGic, LLC. All rights reserved.
@@ -14,8 +14,10 @@
 
 */
 
+
 class IMAGE
-{	private $source = false;
+{
+	private $source = false;
 	private $source_width = 0;
 	private $source_height = 0;
 	private $result = false;
@@ -50,7 +52,9 @@ class IMAGE
 			$this->source_height = $height;
 			return true;
 		}
-		else {			return false;		}
+		else {
+			return false;
+		}
 	}
 
 	public function GetWorkObject() {
@@ -80,7 +84,8 @@ class IMAGE
 			$this->ratio = 1/$ratio;
 			return true;
 		}
-		else {			return false;
+		else {
+			return false;
 		}
 	}
 
@@ -106,12 +111,16 @@ class IMAGE
 		}
 	}
 
-	public function AddFiligree($filename, $xmargin, $ymargin, $xmargin_pos = 'left', $ymargin_pos = 'top', $oposition = 30) {		$this->filigree = new IMAGE();
-		if ( $this->filigree->CreateFromFile($filename) ) {			$this->filigree_x_margin = $xmargin;
-			$this->filigree_y_margin = $ymargin;			$this->filigree_x_margin_pos = $xmargin_pos;
+	public function AddFiligree($filename, $xmargin, $ymargin, $xmargin_pos = 'left', $ymargin_pos = 'top', $oposition = 30) {
+		$this->filigree = new IMAGE();
+		if ( $this->filigree->CreateFromFile($filename) ) {
+			$this->filigree_x_margin = $xmargin;
+			$this->filigree_y_margin = $ymargin;
+			$this->filigree_x_margin_pos = $xmargin_pos;
 			$this->filigree_y_margin_pos = $ymargin_pos;
 			$this->filigree_oposition = $oposition;
-			return true;		}
+			return true;
+		}
 		$this->filigree = false;
 		return false;
 	}
@@ -147,7 +156,8 @@ class IMAGE
 	public function SaveImage($savepath) {
 		$this->CreateResult();
 		if ($this->result) {
-			switch ($this->result_ext) {				case 'png': imagepng($this->result,$savepath); break;
+			switch ($this->result_ext) {
+				case 'png': imagepng($this->result,$savepath); break;
 				case 'jpg': imagejpeg($this->result,$savepath); break;
 				case 'gif': imagegif($this->result,$savepath); break;
 			}
@@ -171,19 +181,25 @@ class IMAGE
 
 	private function CreateResult() {
 		if ( $this->source ) {
-			if ( $this->resize_meth == 1 ) {				$this->CalkRatio();
+			if ( $this->resize_meth == 1 ) {
+				$this->CalkRatio();
 				$this->result_width = $this->source_width/$this->ratio;
-				$this->result_height = $this->source_height/$this->ratio;			}			if ( $this->resize_meth == 2 ) {
+				$this->result_height = $this->source_height/$this->ratio;
+			}
+			if ( $this->resize_meth == 2 ) {
 				$this->result_width = $this->enclose_width;
 				$this->result_height = $this->enclose_height;
 			}
-			if ( $this->resize_meth == 3 ) {				$this->result_width = $this->source_width/$this->ratio;
-				$this->result_height = $this->source_height/$this->ratio;			}
+			if ( $this->resize_meth == 3 ) {
+				$this->result_width = $this->source_width/$this->ratio;
+				$this->result_height = $this->source_height/$this->ratio;
+			}
 			$this->result = imagecreatetruecolor($this->result_width, $this->result_height);
 			$white = ImageColorAllocate($this->result, 255,255,255);
 			imagefill($this->result, 1, 1, $white);
 			imagecopyresampled($this->result, $this->source, 0, 0, 0, 0, $this->result_width, $this->result_height, $this->source_width, $this->source_height);
-			if ( $this->filigree ) {				if ( $this->filigree_x_margin_pos == 'right' ) {
+			if ( $this->filigree ) {
+				if ( $this->filigree_x_margin_pos == 'right' ) {
 					$this->filigree_x_margin = $this->result_width - $this->filigree->GetSourceWidth() - $this->filigree_x_margin;
 				}
 				if ( $this->filigree_y_margin_pos == 'bottom' ) {
@@ -204,3 +220,6 @@ class IMAGE
 	}
 
 }
+
+
+?>

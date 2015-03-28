@@ -14,8 +14,11 @@
 
 */
 
+
 class FUNC
-{	static function GrabRequestVar($method, $vmane, $mn = '', $html = false) {
+{
+
+	static function GrabRequestVar($method, $vmane, $mn = '', $html = false) {
 		$method = strtolower($method);
 		if ($method=='post') { if ($mn=='') { $val=$_POST[$vmane]; } else  { $val=$_POST[$vmane][$mn]; } }
 		if ($method=='get') { if ($mn=='') { $val=$_GET[$vmane]; } else  { $val=$_GET[$vmane][$mn]; } }
@@ -96,7 +99,8 @@ class FUNC
 		if (!FUNC::IsDate($p_d)) { return false; }
 		$n = strlen($m[1]);
 		$p_t = $m[1];
-		if ($seconds && $n==5) {			$p_t = $m[1].':00';
+		if ($seconds && $n==5) {
+			$p_t = $m[1].':00';
 			if (!FUNC::IsTime($p_t)) { return false; }
 		}
 		if (!$seconds && $n==8) {
@@ -276,9 +280,11 @@ class FUNC
 		return($s);
 	}
 
-	static function GetWrongSearchVariants($s) {		$res = Array();
+	static function GetWrongSearchVariants($s) {
+		$res = Array();
 		$res[] = '_'.$s;
-		for ($i=0; $i<strlen($s); $i++) {			$char = $s[$i];
+		for ($i=0; $i<strlen($s); $i++) {
+			$char = $s[$i];
 			$sp1 = substr($s,0,$i);
 			$sp2 = substr($s,$i+1);
 			$res[] = $sp1.'_'.$sp2;
@@ -288,7 +294,8 @@ class FUNC
 		return $res;
 	}
 
-	static function PriceSpacer($s,$spacer = ' ') {		$pricea = explode('.',$s);
+	static function PriceSpacer($s,$spacer = ' ') {
+		$pricea = explode('.',$s);
 		$pricer = strrev($pricea[0]);
 		for($i=0;$i<strlen($pricer);$i++) {
 			$pricer_ .= $pricer[$i];
@@ -296,8 +303,10 @@ class FUNC
 		}
 		$price = strrev($pricer_);
 		if ( count($pricea)>1 ) { return $price.'.'.$pricea[1]; }
-		else { return $price; }	}
+		else { return $price; }
+	}
 
 }
+
 
 ?>

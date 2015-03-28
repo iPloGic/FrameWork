@@ -1,5 +1,4 @@
-<?
-
+<?php
 
 /*
 
@@ -14,7 +13,6 @@
 *** Manual page http://www.iplogic.ru/framework/manual/services/
 
 */
-
 
 
 class TIMER
@@ -44,20 +42,16 @@ class TIMER
 		return $totaltime;
 	}
 
-	public function GetCurrentValue() {
-		$time = round(($this->stop - $this->GetCurrent()),2);
-		return $time;
-	}
-
 }
 
 
 class LOGER
 {
-	private $log;
 	public $log_folder;
+	private $log;
 
-	function __construct() {		$this->log_folder = BASE_PATH.DIRECTORY_SEPARATOR.'temp'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR;
+	function __construct() {
+		$this->log_folder = BASE_PATH.DIRECTORY_SEPARATOR.'temp'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR;
 		return true;
 	}
 
