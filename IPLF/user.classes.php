@@ -102,6 +102,7 @@ class USER_STATIC
 		$data = serialize($_SESSION);
 		$sql = "UPDATE `".DB_PREFIX."sessions` SET `data`='".$data."', `expire`='".(time()+WFCONFIG_SESSION_TIME)."' WHERE `sid`='".session_id()."'";
 		FRAME_CORE::DB()->Go($sql);
+		return true;
 	}
 
 	static function StartSession($id) {
@@ -112,7 +113,9 @@ class USER_STATIC
 			$_SESSION = unserialize($session['data']);
 			USER_STATIC::UpdateSessionTable();
 			setcookie ('session', session_id(), time()+WFCONFIG_SESSION_TIME, '/');
+			return true;
 		}
+		return false;
 	}
 
 }

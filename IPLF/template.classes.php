@@ -100,6 +100,7 @@ class VIEW
 				switch ($condition) {
 					case '': if ( $this->com_var[$var] != '' ) { $accordance = true; } break;
 					case '=': if ( $this->com_var[$var] == $sample ) { $accordance = true; } break;
+					case '!=': if ( $this->com_var[$var] != $sample ) { $accordance = true; } break;
 					case '>': if ( $this->com_var[$var] > $sample ) { $accordance = true; } break;
 					case '<': if ( $this->com_var[$var] < $sample ) { $accordance = true; } break;
 					case '>=': if ( $this->com_var[$var] >= $sample ) { $accordance = true; } break;
