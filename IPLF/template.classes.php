@@ -17,7 +17,7 @@
 
 class VIEW
 {
-	public $from_tpl;
+	protected $from_tpl;
 	protected $com_var = Array();
 
 	function __construct($file = '') {
