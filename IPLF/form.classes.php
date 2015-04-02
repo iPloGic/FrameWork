@@ -171,6 +171,19 @@ class FORM
 		}
 		return true;
 	}
+	
+	public function UnSlash($name = '') {
+		if ( $name != '' ) {
+			if ( !isset($this->fields[$name]) ) { return false; }
+			else { $this->fields[$name]->value = stripslashes($this->fields[$name]->value); }
+		}
+		else {
+			foreach($this->fields as $field) {
+				$field->value = stripslashes($field->value);
+			}
+		}
+		return true;
+	}
 
 	public function GetFieldValue($name) {
 		return $this->fields[$name]->value;
