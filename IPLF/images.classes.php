@@ -32,7 +32,7 @@ class IMAGE
 	private $filigree_y_margin = 0;
 	private $filigree_x_margin_pos = 'left';
 	private $filigree_y_margin_pos = 'top';
-	private $filigree_oposition = 30;
+	private $filigree_transparency = 30;
 	private $result_ext = 'png';
 
 	public function CreateFromFile($filename) {
@@ -111,14 +111,14 @@ class IMAGE
 		}
 	}
 
-	public function AddFiligree($filename, $xmargin, $ymargin, $xmargin_pos = 'left', $ymargin_pos = 'top', $oposition = 30) {
+	public function AddFiligree($filename, $xmargin, $ymargin, $xmargin_pos = 'left', $ymargin_pos = 'top', $transparency = 30) {
 		$this->filigree = new IMAGE();
 		if ( $this->filigree->CreateFromFile($filename) ) {
 			$this->filigree_x_margin = $xmargin;
 			$this->filigree_y_margin = $ymargin;
 			$this->filigree_x_margin_pos = $xmargin_pos;
 			$this->filigree_y_margin_pos = $ymargin_pos;
-			$this->filigree_oposition = $oposition;
+			$this->filigree_transparency = $transparency;
 			return true;
 		}
 		$this->filigree = false;
@@ -153,13 +153,13 @@ class IMAGE
 		}
 	}
 
-	public function SaveImage($savepath) {
+	public function SaveImage($filename) {
 		$this->CreateResult();
 		if ($this->result) {
 			switch ($this->result_ext) {
-				case 'png': imagepng($this->result,$savepath); break;
-				case 'jpg': imagejpeg($this->result,$savepath); break;
-				case 'gif': imagegif($this->result,$savepath); break;
+				case 'png': imagepng($this->result,$filename); break;
+				case 'jpg': imagejpeg($this->result,$filename); break;
+				case 'gif': imagegif($this->result,$filename); break;
 			}
 			return true;
 		}
@@ -205,16 +205,16 @@ class IMAGE
 				if ( $this->filigree_y_margin_pos == 'bottom' ) {
 					$this->filigree_y_margin = $this->result_height - $this->filigree->GetSourceHeight() - $this->filigree_y_margin;
 				}
-				imagecopymerge($this->result, $this->filigree->GetWorkObject(), $this->filigree_x_margin, $this->filigree_y_margin, 0, 0, $this->filigree->GetSourceWidth(), $this->filigree->GetSourceHeight(), $this->filigree_oposition);
+				imagecopymerge($this->result, $this->filigree->GetWorkObject(), $this->filigree_x_margin, $this->filigree_y_margin, 0, 0, $this->filigree->GetSourceWidth(), $this->filigree->GetSourceHeight(), $this->filigree_transparency);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public function Destroy() {
+	public function Destroy($filigree = false) {
 		if ( $this->source ) { imageDestroy( $this->source ); }
-		if ( $this->filigree ) { imageDestroy( $this->filigree ); }
+		if ( $this->filigree && $filigree ) { imageDestroy( $this->filigree ); }
 		if ( $this->result ) { imageDestroy( $this->result ); }
 		return true;
 	}
