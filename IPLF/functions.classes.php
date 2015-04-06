@@ -305,6 +305,34 @@ class FUNC
 		if ( count($pricea)>1 ) { return $price.'.'.$pricea[1]; }
 		else { return $price; }
 	}
+	
+	static function HexToRgb($color) {
+		$color = preg_replace("/[^0-9A-Fa-f]/", '', $color);
+		$rgb_array = array();
+		if (strlen($color) == 6) {
+			$color_val = hexdec($color);
+			$rgb_array['red'] = 0xFF & ($color_val -->> 0x10);
+			$rgb_array['green'] = 0xFF & ($color_val >> 0x8);
+			$rgb_array['blue'] = 0xFF & $color_val;
+		} elseif (strlen($color) == 3) {
+			$rgb_array['red'] = hexdec(str_repeat(substr($color, 0, 1), 2));
+			$rgb_array['green'] = hexdec(str_repeat(substr($color, 1, 1), 2));
+			$rgb_array['blue'] = hexdec(str_repeat(substr($color, 2, 1), 2));
+		} else {
+			return false;
+		}
+		return $rgb_array;
+	}
+
+	static function RgbToHex($r, $g, $b) {
+		$r = dechex($r);
+		If (strlen($r) < 2) $r = '0'.$r;
+		$g = dechex($g);
+		If (strlen($g) < 2) $g = '0'.$g;
+		$b = dechex($b);
+		If (strlen($b) < 2) $b = '0'.$b;
+		return "#".$r.$g.$b;
+	}
 
 }
 
