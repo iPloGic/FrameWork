@@ -4,7 +4,7 @@
 
 *** Static functions Classes
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.0
+*** Version 1.1
 
 *** Copyright (C) 2014 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
