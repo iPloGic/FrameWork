@@ -310,10 +310,9 @@ class FUNC
 		$color = preg_replace("/[^0-9A-Fa-f]/", '', $color);
 		$rgb_array = array();
 		if (strlen($color) == 6) {
-			$color_val = hexdec($color);
-			$rgb_array['red'] = 0xFF & ($color_val -->> 0x10);
-			$rgb_array['green'] = 0xFF & ($color_val >> 0x8);
-			$rgb_array['blue'] = 0xFF & $color_val;
+			$rgb_array['red'] = hexdec(substr($color, 0, 2));
+			$rgb_array['green'] = hexdec(substr($color, 2, 2));
+			$rgb_array['blue'] = hexdec(substr($color, 4, 2));
 		} elseif (strlen($color) == 3) {
 			$rgb_array['red'] = hexdec(str_repeat(substr($color, 0, 1), 2));
 			$rgb_array['green'] = hexdec(str_repeat(substr($color, 1, 1), 2));
