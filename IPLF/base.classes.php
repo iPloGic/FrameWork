@@ -233,7 +233,7 @@ class FRAME_CORE
 
 	public function RunController() {
 		if(!CONTROLLER::Initiate($this->section_name)) {
-			$this->Error404();
+			FRAME_CORE::Error404();
 			die();
 		}
 		$this->component = new Component();
@@ -264,13 +264,14 @@ class FRAME_CORE
 		return $html_result;
 	}
 
-	public function Error404() {
+	static function Error404() {
 		if ( file_exists( BASE_URL."404.php" ) ) {
 			header("Location: ".BASE_URL."404.php ");
 		}
 		else {
 			echo "Error 404. Page not found. Check URL, or try later.";
 		}
+		die();
 	}
 
 	public function Execute() {
