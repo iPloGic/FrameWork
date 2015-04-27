@@ -305,7 +305,7 @@ class FUNC
 		if ( count($pricea)>1 ) { return $price.'.'.$pricea[1]; }
 		else { return $price; }
 	}
-	
+
 	static function HexToRgb($color) {
 		$color = preg_replace("/[^0-9A-Fa-f]/", '', $color);
 		$rgb_array = array();

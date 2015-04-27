@@ -4,7 +4,7 @@
 
 *** Images Works Class
 *** Is a part of iPloGic FrameWork 1.x
-*** Version 1.0
+*** Version 1.1
 
 *** Copyright (C) 2013 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
@@ -34,6 +34,7 @@ class IMAGE
 	private $filigree_y_margin_pos = 'top';
 	private $filigree_transparency = 30;
 	private $result_ext = 'png';
+	private $antialias = false;
 
 	public function CreateFromFile($filename) {
 		$idata = @getimagesize($filename);
@@ -48,8 +49,11 @@ class IMAGE
 
 	public function CreateBlank($width, $height) {
 		if ($this->source = @imagecreatetruecolor($width, $height)) {
+			imageantialias($this->source, true);
+			$this->antialias = true;
 			$this->source_width = $width;
 			$this->source_height = $height;
+			$this->resize_meth = 3;
 			return true;
 		}
 		else {
@@ -75,7 +79,7 @@ class IMAGE
 	public function SetResizeMethod($m) {
 		if ( $m == 'enclosed' ) { $this->resize_meth = 1; return true; }
 		elseif ( $m == 'resize' ) { $this->resize_meth = 2; return true; }
-		elseif ( $m == 'direct_ratio' ) { $this->ratio_meth = 3; return true; }
+		elseif ( $m == 'direct_ratio' ) { $this->resize_meth = 3; return true; }
 		else { return false; }
 	}
 
@@ -125,33 +129,134 @@ class IMAGE
 		return false;
 	}
 
-	private function CalkRatio() {
-		(double)$ratiow=(double)$this->source_width/ (double)$this->enclose_width;
-		(double)$ratioh=(double)$this->source_height/ (double)$this->enclose_height;
-		if( $ratiow < 1 && $ratioh < 1 ) {
-			if( $ratiow > $ratioh ) { $this->ratio = $ratiow; }
-			else { $this->ratio = $ratioh; }
-		}
-		elseif( $ratiow > 1 && $ratioh > 1 ) {
-			if( $ratiow < $ratioh ) { $this->ratio = $ratioh; }
-			else { $this->ratio = $ratiow; }
-		}
-		elseif( $ratiow > 1 && $ratioh == 1 ) {
-			$this->ratio = $ratiow;
-		}
-		elseif( $ratiow < 1 && $ratioh ==1 ) {
-			$this->ratio = $ratioh;
-		}
-		elseif( $ratiow >= 1 && $ratioh < 1 ) {
-			$this->ratio = $ratiow;
-		}
-		elseif( $ratiow <= 1 && $ratioh > 1 ) {
-			$this->ratio = $ratioh;
-		}
-		elseif( $ratiow == 1 && $ratioh == 1 ) {
-			$this->ratio = 1;
-		}
+	public function AntiAliasing($enabled) {
+		imageantialias($this->source, $enabled);
+		$this->antialias = $enabled;
+		return true;
 	}
+
+	public function Point($x, $y) {
+		return new POINT(round($x), round($y));
+	}
+
+	public function Fill($color) {		$c = $this->ColorRecource($color);
+		imagefill($this->source, 0, 0, $c);
+		imagecolordeallocate ($this->source , $c);
+		return true;	}
+
+	public function Pixel($color, $point) {		$c = $this->ColorRecource($color);
+		imagesetpixel($this->source, $point->x, $point->y, $c);
+		imagecolordeallocate ($this->source , $c);
+		return true;	}
+
+	public function Line($color, $point1, $point2, $thickness = 1) {		$c = $this->ColorRecource($color);
+		if ($thickness == 1) {
+			imageline($this->source, $point1->x, $point1->y, $point2->x, $point2->y, $c);
+		}
+		elseif ($point1->x == $point2->x || $point1->y == $point2->y) {
+			$t = $thickness / 2 - 0.5;
+			imagefilledrectangle($image, round(min($point1->x, $point2->x) - $t), round(min($point1->y, $point2->y) - $t), round(max($point1->x, $point2->x) + $t), round(max($point1->y, $point2->y) + $t), $c);
+		}
+		else {
+			$k = ($point2->y - $point1->y) / ($point2->x - $point1->x);
+			$a = $t / sqrt(1 + pow($k, 2));
+			$points = Array(
+				round($point1->x - (1+$k)*$a), round($point1->y + (1-$k)*$a), round($point1->x - (1-$k)*$a), round($point1->y - (1+$k)*$a),
+				round($point2->x + (1+$k)*$a), round($point2->y - (1-$k)*$a), round($point2->x + (1-$k)*$a), round($point2->y + (1+$k)*$a)
+			);
+			imagefilledpolygon($this->source, $points, 4, $c);
+			imagepolygon($this->source, $points, 4, $c);
+		}
+		imagecolordeallocate ($this->source , $c);
+		return true;	}
+
+	public function Rectangle($color, $point1, $point2, $fill = false) {
+		$c = $this->ColorRecource($color);
+		if ( $fill ) {
+			imagefilledrectangle($this->source, $point1->x, $point1->y, $point2->x, $point2->y, $c);
+		}
+		else {			imagerectangle($this->source, $point1->x, $point1->y, $point2->x, $point2->y, $c);		}
+		imagecolordeallocate ($this->source , $c);
+		return true;
+	}
+
+	public function Polygon($color, $points, $fill = false) {
+		$c = $this->ColorRecource($color);
+		$num = count($points);
+		if ( $num < 3 ) { return false; }
+		$coords = Array();
+		foreach ( $points as $point ) { $coords[] = $point->x; $coords[] = $point->y; }
+		if ( $fill ) {
+			imagefilledpolygon($this->source, $coords, $num, $c);
+		}
+		else {
+			imagepolygon($this->source, $coords, $num, $c);
+		}
+		imagecolordeallocate ($this->source , $c);
+		return true;
+	}
+
+	public function Ellipse($color, $center, $width, $height = 0, $fill = false) {
+		$c = $this->ColorRecource($color);
+		if ( $height == 0 ) { $height = $width; }
+		if ( $fill ) {
+			imagefilledellipse($this->source, $center->x, $center->y, $width, $height, $c);
+		}
+		else {
+			imageellipse($this->source, $center->x, $center->y, $width, $height, $c);
+		}
+		imagecolordeallocate ($this->source , $c);
+		return true;
+	}
+
+	public function Arc($color, $center, $start, $end, $width, $height = 0, $fill = false) {
+		$c = $this->ColorRecource($color);
+		if ( $height == 0 ) { $height = $width; }
+		if ( $fill ) {
+			imagearc($this->source, $center->x, $center->y, $width, $height, $start, $end, $c);
+			$a1 = $this->ArcPoint($center, $width, $height, $start);
+			$p1 = new POINT($a1[0], $a1[1]);
+			$a2 = $this->ArcPoint($center, $width, $height, $end);
+			$p2 = new POINT($a2[0], $a2[1]);
+			$aa = $this->antialias;
+			$this->AntiAliasing(false);
+			$this->Line($color, $p1, $p2);
+			$a3 = $this->ArcPoint($center, ($width-4), ($height-4), (($start+$end)/2));
+			$p3 = new POINT($a3[0], $a3[1]);
+			$this->FillÑontour($color, $color, $p3);
+			$this->AntiAliasing(false);
+		}
+		else {
+			imagearc($this->source, $center->x, $center->y, $width, $height, $start, $end, $c);
+		}
+		imagecolordeallocate ($this->source , $c);
+		return true;
+	}
+
+	public function Sector($color, $center, $start, $end, $width, $height = 0, $fill = false) {
+		$c = $this->ColorRecource($color);
+		if ( $height == 0 ) { $height = $width; }
+		if ( $fill ) {
+			imagefilledarc($this->source, $center->x, $center->y, $width, $height, $start, $end, $c, IMG_ARC_PIE);
+		}
+		else {
+			imagefilledarc($this->source, $center->x, $center->y, $width, $height, $start, $end, $c, IMG_ARC_NOFILL|IMG_ARC_EDGED);
+		}
+		imagecolordeallocate ($this->source , $c);
+		return true;
+	}
+
+	public function Text($text, $color, $point, $font, $size = 14, $angle = 0, $transparency = 0) {		$c = $this->ColorRecource($color, $transparency);
+		$ret = imagettftext ($this->source, $size, $angle, $point->x, $point->y, $c, $font, $text);
+		imagecolordeallocate ($this->source , $c);
+		return true;	}
+
+	public function FillÑontour($color, $contour_color, $point) {		$c = $this->ColorRecource($color);
+		$cc = $this->ColorRecource($contour_color);
+		imagefilltoborder($this->source, $point->x, $point->y, $cc, $c);
+		imagecolordeallocate ($this->source , $c);
+		imagecolordeallocate ($this->source , $cc);
+		return true;	}
 
 	public function SaveImage($filename) {
 		$this->CreateResult();
@@ -177,6 +282,13 @@ class IMAGE
 			return true;
 		}
 		return false;
+	}
+
+	public function Destroy($filigree = false) {
+		if ( $this->source ) { imageDestroy( $this->source ); }
+		if ( $this->filigree && $filigree ) { imageDestroy( $this->filigree ); }
+		if ( $this->result ) { imageDestroy( $this->result ); }
+		return true;
 	}
 
 	private function CreateResult() {
@@ -212,14 +324,62 @@ class IMAGE
 		return false;
 	}
 
-	public function Destroy($filigree = false) {
-		if ( $this->source ) { imageDestroy( $this->source ); }
-		if ( $this->filigree && $filigree ) { imageDestroy( $this->filigree ); }
-		if ( $this->result ) { imageDestroy( $this->result ); }
-		return true;
+	private function CalkRatio() {
+		(double)$ratiow=(double)$this->source_width/ (double)$this->enclose_width;
+		(double)$ratioh=(double)$this->source_height/ (double)$this->enclose_height;
+		if( $ratiow < 1 && $ratioh < 1 ) {
+			if( $ratiow > $ratioh ) { $this->ratio = $ratiow; }
+			else { $this->ratio = $ratioh; }
+		}
+		elseif( $ratiow > 1 && $ratioh > 1 ) {
+			if( $ratiow < $ratioh ) { $this->ratio = $ratioh; }
+			else { $this->ratio = $ratiow; }
+		}
+		elseif( $ratiow > 1 && $ratioh == 1 ) {
+			$this->ratio = $ratiow;
+		}
+		elseif( $ratiow < 1 && $ratioh ==1 ) {
+			$this->ratio = $ratioh;
+		}
+		elseif( $ratiow >= 1 && $ratioh < 1 ) {
+			$this->ratio = $ratiow;
+		}
+		elseif( $ratiow <= 1 && $ratioh > 1 ) {
+			$this->ratio = $ratioh;
+		}
+		elseif( $ratiow == 1 && $ratioh == 1 ) {
+			$this->ratio = 1;
+		}
+	}
+
+	private function ArcPoint($center, $width, $height, $angle) {
+		$a = $width/2 - 0.5;
+		$b = $height/2 - 0.5;
+		$fi = (round(360-$angle)%360)*(3.14/180);
+		$x = 250 + ($a*cos($fi));
+		$y = 200 - ($b*sin($fi));
+		return Array($x, $y);
+	}
+
+	private function ColorRecource($color, $alpha = 0) {
+		$rgb = FUNC::HexToRgb($color);
+		if ( $alpha == 0 ) {
+			return imagecolorallocate($this->source, $rgb['red'], $rgb['green'], $rgb['blue']);
+		}
+		else {			$a = round((127/100)*$alpha);
+			return imagecolorallocatealpha($this->source, $rgb['red'], $rgb['green'], $rgb['blue'], $a);		}
 	}
 
 }
+
+
+class POINT
+{	public $x;
+	public $y;
+
+	function __construct($x, $y) {		$this->x = $x;
+		$this->y = $y;	}
+}
 
 
 ?>

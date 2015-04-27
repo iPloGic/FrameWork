@@ -4,7 +4,7 @@
 
 *** Base Classes
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.0
+*** Version 1.1
 
 *** Copyright (C) 2014 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
@@ -27,7 +27,7 @@ class FRAME_CORE
 	private $access_area = 'public';
 	private $user;
 
-	static function getInstance() {
+	public static function getInstance() {
 		static $me;
 		if (is_object($me) == true) {
 			return $me;
@@ -211,6 +211,10 @@ class FRAME_CORE
 		$parameter = self::getInstance()->parameters[$par];
 		if ($key=='') { return $parameter; }
 		else { return $parameter[$key]; }
+	}
+
+	public static function UV($num) {
+		return self::getInstance()->parameters['url_variables'][$num];
 	}
 
 	public static function SetParameter($val,$par,$key='',$add=false) {
