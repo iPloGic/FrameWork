@@ -269,7 +269,7 @@ class FRAME_CORE
 	}
 
 	static function Error404() {
-		if ( file_exists( BASE_URL."404.php" ) ) {
+		if ( file_exists( BASE_PATH."404.php" ) ) {
 			header("Location: ".BASE_URL."404.php ");
 		}
 		else {
