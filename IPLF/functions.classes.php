@@ -4,11 +4,11 @@
 
 *** Static functions Classes
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.1
+*** Version 1.2
 
 *** Copyright (C) 2014 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
-*** Link http://www.iplogic.ru, info@iplogic.ru.
+*** Link http://iplogic.ru, info@iplogic.ru.
 
 *** Manual page http://www.iplogic.ru/framework/manual/func/
 
@@ -76,9 +76,7 @@ class FUNC
 		if (FUNC::IsDate($p_d)) {
 			return $p_d;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	static function RusToSqlDate($date) {
@@ -87,9 +85,7 @@ class FUNC
 		if (FUNC::IsSqlDate($p_d)) {
 			return $p_d;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	static function TimestampToRus($string, $seconds = true) {
@@ -177,9 +173,7 @@ class FUNC
 			closedir($dirHandle);
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	static function RemoveDir($path){
@@ -187,9 +181,7 @@ class FUNC
 			rmdir($path);
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	static function CopyDir($from,$to) {
@@ -208,9 +200,7 @@ class FUNC
 			closedir($dir);
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	static function IsValidEmail($email) {
