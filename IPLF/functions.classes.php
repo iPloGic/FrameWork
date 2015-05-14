@@ -4,7 +4,7 @@
 
 *** Static functions Classes
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.2
+*** Version 1.3
 
 *** Copyright (C) 2014 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
@@ -257,6 +257,24 @@ class FUNC
 		}
 		return false;
 	}
+	
+	static function IsTimestamp( $string, $seconds=true ) {
+		$m=explode(' ',trim($string));
+		$e=explode('-',$m[0]);
+		$p_d=$e[2].".".$e[1].".".$e[0];
+		if (!FUNC::IsDate($p_d)) { return false; }
+		$n = strlen($m[1]);
+		$p_t = $m[1];
+		if ($seconds && $n==5) {
+			$p_t = $m[1].':00';
+			if (!FUNC::IsTime($p_t)) { return false; }
+		}
+		if (!$seconds && $n==8) {
+			$p_t = substr($m[1],0,5);
+			if (!FUNC::IsTime($p_t,false)) { return false; }
+		}
+		return true;
+	}	
 
 	static function TextAreaToHtml($s) {
 		$s = nl2br($s);
