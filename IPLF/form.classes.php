@@ -4,7 +4,7 @@
 
 *** Forms Works Class
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.0
+*** Version 1.1
 
 *** Copyright (C) 2013 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
@@ -64,6 +64,7 @@ class FORM
 		$this->fields[$name] = new $this->classes[$type]();
 		$this->fields[$name]->name = $name;
 		$this->fields[$name]->type = $type;
+		if ( $value != '' ) { $this->fields[$name]->value = $value; }
 		$this->cfield = $name;
 		return true;
 	}
