@@ -110,7 +110,7 @@ class FUNC
 	static function RusToTimestamp($string, $seconds = true) {
 		$m=explode(' ',trim($string));
 		$e=explode('-',$m[0]);
-		$p_d=$e[2]."-".$e[1]."-".$e[0];
+		$p_d=$e[2].".".$e[1]."-".$e[0];
 		if (!FUNC::IsSqlDate($p_d)) { return false; }
 		$n = strlen($m[1]);
 		$p_t = $m[1];
