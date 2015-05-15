@@ -4,7 +4,7 @@
 
 *** Forms Works Class
 *** Is a part of iPloGic IPLF FrameWork 1.x
-*** Version 1.1
+*** Version 1.2
 
 *** Copyright (C) 2013 iPloGic, LLC. All rights reserved.
 *** License GNU/GPL http://www.iplogic.ru/licenses/gpl/
@@ -151,7 +151,13 @@ class FORM
 		$method = strtolower($this->method);
 		foreach($this->fields as $field) {
 			if ( $field->type == 'checkbox' ) {
-				if ( isset($_REQUEST[$field->name]) ) {
+				$val = $_REQUEST[$field->name];
+				if( strpos($field->name,'[') !== false ) {
+					$s = explode('[',$field->name);
+					$s[1] = str_replace(']','',$s[1]);
+					$val = $_REQUEST[$s[0]][$s[1]];
+				}
+				if ( $val != '' ) {
 					$field->value = 1;
 					$field->checked = true;
 				}
